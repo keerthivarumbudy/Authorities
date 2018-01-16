@@ -45,8 +45,13 @@ public class MainActivity extends AppCompatActivity {
                         String checkPassword = dataSnapshot.getValue(String.class);
                         if(checkPassword.equals(password)){
                             Intent intent1 = new Intent(MainActivity.this, ComplaintList.class);
+                            intent1.putExtra("username", username);
                             MainActivity.this.startActivity(intent1);
-
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(),"Login failed",Toast.LENGTH_SHORT);
+                            return;
+                            //THERE'S A BUG HERE
                         }
 
                     }
@@ -55,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onCancelled(DatabaseError databaseError) {
                         Toast.makeText(getApplicationContext(),"Login failed",Toast.LENGTH_SHORT);
                     }
+
 
                 });
 
