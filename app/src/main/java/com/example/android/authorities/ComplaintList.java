@@ -15,6 +15,7 @@ package com.example.android.authorities;
         import com.google.firebase.database.ValueEventListener;
 
         import java.util.ArrayList;
+        import java.util.List;
 
 
 public class ComplaintList extends AppCompatActivity {
@@ -30,81 +31,86 @@ public class ComplaintList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complaint_list);
-        mListView= findViewById(R.id.displayComplaints);
-        mDatabase=mDatabase.getInstance();
-        mRef=mDatabase.getReference();
+        mListView = findViewById(R.id.displayComplaints);
+        mDatabase = mDatabase.getInstance();
+        mRef = mDatabase.getReference();
         Bundle bundle = getIntent().getExtras();
         User = bundle.getString("username");
+        if (User.equals("keerthi")) {
+            databaseNode = "Complaints_keerthi_ward1";
+            Log.d("user", databaseNode);
+        } else if (User.equals("kush")) {
+            databaseNode = "Complaints_kush_ward2";
+            Log.d("user", databaseNode);
+            // mPoliticianChild=mRef.child(databaseNode);
+        } else {
+            databaseNode = "Complaints_sarkar_ward3";
+            Log.d("user", databaseNode);
+        }
+
+        mRef=mRef.child(databaseNode);
+
+        //getting id's of all children
+       /* final List<String> userIdList = new ArrayList();
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("onDataChange","mRef works");
+                if (dataSnapshot == null)
+                    return;
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    userIdList.add(postSnapshot.getKey());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Error
+            }
+        });
+        final String userID = mRef.child(databaseNode).orderByKey().equalTo(userIdList.get(0)).toString();
+*/
+
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 showComplaints(dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("onCancelled","cancelled");
 
             }
         });
 
     }
-    public void showComplaints(DataSnapshot dataSnapshot){
-        ArrayList<String> array= new ArrayList<>();
-        array.clear();
+
+    public void showComplaints(DataSnapshot dataSnapshot) {
+        ArrayList<String> array = new ArrayList<>();
         String key;
-        Log.d("showComplaints","entered");
+        Log.d("showComplaints", "entered");
+        Integer i=1;
+        array.clear();
 
-            if(User.equals("keerthi")){
-                databaseNode="Complaints_keerthi_ward1";
-                Log.d("user",databaseNode);
-            }
-            else if(User.equals("kush")){
-                databaseNode="Complaints_kush_ward2";
-                Log.d("user",databaseNode);
-               // mPoliticianChild=mRef.child(databaseNode);
-            }
-            else{
-                databaseNode="Complaints_sarkar_ward3";
-                Log.d("user",databaseNode);
-            }
-        for(DataSnapshot ds: dataSnapshot.getChildren()){
-            getComplaintInformation ComplaintInfo=new getComplaintInformation();
-            for(DataSnapshot innerDS: dataSnapshot.getChildren()){
-                for( DataSnapshot inner2DS: dataSnapshot.getChildren()){
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
-                    key=inner2DS.getKey().toString();
-                    Log.d(innerDS.toString(),key);
+            array.add("Complaint"+i);
+            i++;
 
-                }
+            for(DataSnapshot innerDS: ds.getChildren()){
 
+                String complaintStuff=innerDS.getValue().toString();
+                key=innerDS.getKey().toString();
+                array.add(key+"-"+complaintStuff);
             }
 
-            //setting the information
-           /* ComplaintInfo.setComplaintType(ds.child(databaseNode).getValue(getComplaintInformation.class).getComplaintType());
-            ComplaintInfo.setComplaint(ds.child(databaseNode).getValue(getComplaintInformation.class).getComplaint());
-            ComplaintInfo.setComplaintDate(ds.child(databaseNode).getValue(getComplaintInformation.class).getComplaintDate());
-            ComplaintInfo.setComplaintDetails(ds.child(databaseNode).getValue(getComplaintInformation.class).getComplaintDetails());
-            ComplaintInfo.setComplaintLocation(ds.child(databaseNode).getValue(getComplaintInformation.class).getComplaintLocation());
-            ComplaintInfo.setComplaintTime(ds.child(databaseNode).getValue(getComplaintInformation.class).getComplaintTime());
 
-            Log.d("data","show data"+ComplaintInfo.getComplaintType());
-
-            ArrayList<String> array= new ArrayList<>();
-            array.add(ComplaintInfo.ComplaintType);
-            array.add(ComplaintInfo.Complaint);
-            array.add(ComplaintInfo.ComplaintDate);
-            array.add(ComplaintInfo.ComplaintDetails);
-            array.add(ComplaintInfo.ComplaintLocation);
-            array.add(ComplaintInfo.ComplaintTime);*/
-           /* ArrayList<String> array= new ArrayList<>();
-            array.add("HElloo");
-            array.add("WHATTAAAAAAAAAP");
-            array.add("ITS WORKING??????");*/
-
-            ArrayAdapter adapter= new ArrayAdapter(this,android.R.layout.simple_list_item_1,array);
-            mListView.setAdapter(adapter);
         }
+
+
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, array);
+        mListView.setAdapter(adapter);
+
     }
 }
+
+
