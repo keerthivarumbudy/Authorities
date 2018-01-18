@@ -20,6 +20,7 @@ package com.example.android.authorities;
 public class ComplaintList extends AppCompatActivity {
 
     private DatabaseReference mRef;
+    private DatabaseReference mPoliticianChild;
     private FirebaseDatabase mDatabase;
     private String User;
     private String databaseNode;
@@ -37,30 +38,51 @@ public class ComplaintList extends AppCompatActivity {
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("onDataChange","mRef works");
                 showComplaints(dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                Log.d("onCancelled","cancelled");
 
             }
         });
 
     }
     public void showComplaints(DataSnapshot dataSnapshot){
-        for(DataSnapshot ds: dataSnapshot.getChildren()){
-            getComplaintInformation ComplaintInfo=new getComplaintInformation();
+        ArrayList<String> array= new ArrayList<>();
+        array.clear();
+        String key;
+        Log.d("showComplaints","entered");
+
             if(User.equals("keerthi")){
                 databaseNode="Complaints_keerthi_ward1";
+                Log.d("user",databaseNode);
             }
             else if(User.equals("kush")){
                 databaseNode="Complaints_kush_ward2";
+                Log.d("user",databaseNode);
+               // mPoliticianChild=mRef.child(databaseNode);
             }
             else{
                 databaseNode="Complaints_sarkar_ward3";
+                Log.d("user",databaseNode);
             }
+        for(DataSnapshot ds: dataSnapshot.getChildren()){
+            getComplaintInformation ComplaintInfo=new getComplaintInformation();
+            for(DataSnapshot innerDS: dataSnapshot.getChildren()){
+                for( DataSnapshot inner2DS: dataSnapshot.getChildren()){
+
+                    key=inner2DS.getKey().toString();
+                    Log.d(innerDS.toString(),key);
+
+                }
+
+            }
+
             //setting the information
-            ComplaintInfo.setComplaintType(ds.child(databaseNode).getValue(getComplaintInformation.class).getComplaintType());
+           /* ComplaintInfo.setComplaintType(ds.child(databaseNode).getValue(getComplaintInformation.class).getComplaintType());
             ComplaintInfo.setComplaint(ds.child(databaseNode).getValue(getComplaintInformation.class).getComplaint());
             ComplaintInfo.setComplaintDate(ds.child(databaseNode).getValue(getComplaintInformation.class).getComplaintDate());
             ComplaintInfo.setComplaintDetails(ds.child(databaseNode).getValue(getComplaintInformation.class).getComplaintDetails());
@@ -75,8 +97,11 @@ public class ComplaintList extends AppCompatActivity {
             array.add(ComplaintInfo.ComplaintDate);
             array.add(ComplaintInfo.ComplaintDetails);
             array.add(ComplaintInfo.ComplaintLocation);
-            array.add(ComplaintInfo.ComplaintTime);
-
+            array.add(ComplaintInfo.ComplaintTime);*/
+           /* ArrayList<String> array= new ArrayList<>();
+            array.add("HElloo");
+            array.add("WHATTAAAAAAAAAP");
+            array.add("ITS WORKING??????");*/
 
             ArrayAdapter adapter= new ArrayAdapter(this,android.R.layout.simple_list_item_1,array);
             mListView.setAdapter(adapter);
