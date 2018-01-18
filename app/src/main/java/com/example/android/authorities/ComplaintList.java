@@ -93,15 +93,16 @@ public class ComplaintList extends AppCompatActivity {
 
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
-            array.add("Complaint"+i);
+            array.add("Complaint".toUpperCase() +i);
             i++;
 
             for(DataSnapshot innerDS: ds.getChildren()){
 
                 String complaintStuff=innerDS.getValue().toString();
                 key=innerDS.getKey().toString();
-                array.add(key+"-"+complaintStuff);
+                array.add(key+" - "+complaintStuff);
             }
+            array.add("\n");
 
 
         }
