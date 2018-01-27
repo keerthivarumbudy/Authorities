@@ -1,12 +1,16 @@
 package com.example.android.authorities;
 
+        import android.content.Intent;
         import android.nfc.Tag;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.util.Log;
+        import android.view.View;
         import android.widget.Adapter;
+        import android.widget.AdapterView;
         import android.widget.ArrayAdapter;
         import android.widget.ListView;
+        import android.widget.Toast;
 
         import com.google.firebase.database.DataSnapshot;
         import com.google.firebase.database.DatabaseError;
@@ -15,7 +19,10 @@ package com.example.android.authorities;
         import com.google.firebase.database.ValueEventListener;
 
         import java.util.ArrayList;
+        import java.util.HashMap;
         import java.util.List;
+
+        import android.widget.AdapterView.OnItemClickListener;
 
 
 public class ComplaintList extends AppCompatActivity {
@@ -26,6 +33,8 @@ public class ComplaintList extends AppCompatActivity {
     private String User;
     private String databaseNode;
     private ListView mListView;
+
+    final HashMap<Integer,ArrayList> hashMap=new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,26 +59,6 @@ public class ComplaintList extends AppCompatActivity {
 
         mRef=mRef.child(databaseNode);
 
-        //getting id's of all children
-       /* final List<String> userIdList = new ArrayList();
-        mRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot == null)
-                    return;
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    userIdList.add(postSnapshot.getKey());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Error
-            }
-        });
-        final String userID = mRef.child(databaseNode).orderByKey().equalTo(userIdList.get(0)).toString();
-*/
-
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -85,31 +74,56 @@ public class ComplaintList extends AppCompatActivity {
     }
 
     public void showComplaints(DataSnapshot dataSnapshot) {
-        ArrayList<String> array = new ArrayList<>();
-        String key;
+
+        ArrayList<String> array1 = new ArrayList<>();
+        String num;
         Log.d("showComplaints", "entered");
         Integer i=1;
-        array.clear();
+        array1.clear();
 
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
-            array.add("Complaint".toUpperCase() +i);
-            i++;
+            array1.add("Complaint ".toUpperCase() +i);
+            ArrayList<String> array2 = new ArrayList<>();
 
             for(DataSnapshot innerDS: ds.getChildren()){
 
                 String complaintStuff=innerDS.getValue().toString();
-                key=innerDS.getKey().toString();
-                array.add(key+" - "+complaintStuff);
+                num=innerDS.getKey().toString();
+                array2.add(num+" - "+complaintStuff);
             }
-            array.add("\n");
-
+            hashMap.put(i,array2);
+            Log.d("checking hashmap",""+hashMap.get(i));
+            array1.add("\n");
+            i++;
 
         }
+        Log.d("checking hashmap",""+hashMap.get(1)+hashMap.get(2));
 
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, array);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, array1);
         mListView.setAdapter(adapter);
+
+        mListView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                if (position % 2 == 0) {
+                    String value = mListView.getItemAtPosition(position).toString();
+                    Log.d("check value",value);
+                    String[] array3 = value.split(" ");
+                    int key = Integer.parseInt(array3[1]);
+                    Intent intent1 = new Intent(ComplaintList.this, DisplayComplaint.class);
+                    intent1.putStringArrayListExtra("hashMap", hashMap.get(key));
+
+                    Log.d("check hashmap", ""+hashMap.get(key));
+                    ComplaintList.this.startActivity(intent1);
+
+                } else {
+                    return;
+
+                }
+            }
+        });
 
     }
 }
