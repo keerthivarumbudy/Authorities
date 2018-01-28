@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String checkPassword = dataSnapshot.getValue(String.class);
                         if(checkPassword.equals(password)){
-                            Intent intent1 = new Intent(MainActivity.this, ComplaintList.class);
+                            Intent intent1 = new Intent(MainActivity.this, AuthorityMenu.class);
                             intent1.putExtra("username", username);
                             MainActivity.this.startActivity(intent1);
                         }
