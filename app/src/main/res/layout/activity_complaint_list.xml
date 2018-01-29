@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.authorities.MainActivity">
 
+    <include layout="@layout/app_bar_layout" android:id="@+id/main_page_toolbar"/>
+
 
     <ListView
         android:id="@+id/displayComplaints"
