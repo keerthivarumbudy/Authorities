@@ -82,6 +82,7 @@ public class AuthorityMenu extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //notification stuff
+                setNotification();
 
 
             }

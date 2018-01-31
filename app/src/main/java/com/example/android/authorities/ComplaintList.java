@@ -1,28 +1,32 @@
 package com.example.android.authorities;
 
-        import android.content.Intent;
-        import android.nfc.Tag;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.Adapter;
-        import android.widget.AdapterView;
-        import android.widget.ArrayAdapter;
-        import android.widget.ListView;
-        import android.widget.Toast;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.nfc.Tag;
+import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
-        import com.google.firebase.database.DataSnapshot;
-        import com.google.firebase.database.DatabaseError;
-        import com.google.firebase.database.DatabaseReference;
-        import com.google.firebase.database.FirebaseDatabase;
-        import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-        import java.util.ArrayList;
-        import java.util.HashMap;
-        import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-        import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemClickListener;
 
 
 public class ComplaintList extends AppCompatActivity {
@@ -33,6 +37,8 @@ public class ComplaintList extends AppCompatActivity {
     private String User;
     private String databaseNode;
     private ListView mListView;
+    private NotificationCompat.Builder notification;
+    private static final int NotificationId=48574;
 
     final HashMap<Integer,ArrayList> hashMap=new HashMap<>();
 
@@ -43,6 +49,7 @@ public class ComplaintList extends AppCompatActivity {
         mListView = findViewById(R.id.displayComplaints);
         mDatabase = mDatabase.getInstance();
         mRef = mDatabase.getReference();
+        notification= new NotificationCompat.Builder(this);
         Bundle bundle = getIntent().getExtras();
         User = bundle.getString("username");
         if (User.equals("keerthi")) {
@@ -63,6 +70,7 @@ public class ComplaintList extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 showComplaints(dataSnapshot);
+                setNotification();
             }
 
             @Override
@@ -70,7 +78,6 @@ public class ComplaintList extends AppCompatActivity {
 
             }
         });
-
     }
 
     public void showComplaints(DataSnapshot dataSnapshot) {
@@ -126,6 +133,19 @@ public class ComplaintList extends AppCompatActivity {
         });
 
     }
+    public void setNotification(){
+        notification.setAutoCancel(true);
+        notification.setSmallIcon(R.drawable.ic_launcher_foreground);
+        notification.setTicker("You have a new complaint");
+        notification.setWhen(System.currentTimeMillis());
+        notification.setContentTitle("You have a new complaint");
+        notification.setContentText("Read the complaint");
+        Intent intent2 =new Intent(this,MainActivity.class);
+        PendingIntent pendingIntent= PendingIntent.getActivity(this,0,intent2,PendingIntent.FLAG_UPDATE_CURRENT);
+        notification.setContentIntent(pendingIntent);
+        NotificationManager NotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotifyMgr.notify(NotificationId, notification.build());
+
+
+    }
 }
-
-
