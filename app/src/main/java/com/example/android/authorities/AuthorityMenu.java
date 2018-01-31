@@ -84,7 +84,6 @@ public class AuthorityMenu extends AppCompatActivity {
                 //notification stuff
                 setNotification();
 
-
             }
 
             @Override
