@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +84,9 @@ public class ComplaintList extends AppCompatActivity {
     public void showComplaints(DataSnapshot dataSnapshot) {
 
         ArrayList<String> array1 = new ArrayList<>();
+        final ArrayList<String> cidlist = new ArrayList<>();
         String num;
+        String c;
         Log.d("showComplaints", "entered");
         Integer i=1;
         array1.clear();
@@ -91,8 +94,10 @@ public class ComplaintList extends AppCompatActivity {
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
             array1.add("Complaint ".toUpperCase() +i);
+            c= ds.getKey().toString();
+            //cidlist.add(c);
             ArrayList<String> array2 = new ArrayList<>();
-
+            array2.add(c);
             for(DataSnapshot innerDS: ds.getChildren()){
 
                 String complaintStuff=innerDS.getValue().toString();
@@ -121,7 +126,8 @@ public class ComplaintList extends AppCompatActivity {
                     int key = Integer.parseInt(array3[1]);
                     Intent intent1 = new Intent(ComplaintList.this, DisplayComplaint.class);
                     intent1.putStringArrayListExtra("hashMap", hashMap.get(key));
-
+                    //intent1.putExtra("cid",cidlist.get((position/2)-1));
+                    intent1.putExtra("username",User);
                     Log.d("check hashmap", ""+hashMap.get(key));
                     ComplaintList.this.startActivity(intent1);
 
@@ -140,7 +146,7 @@ public class ComplaintList extends AppCompatActivity {
         notification.setWhen(System.currentTimeMillis());
         notification.setContentTitle("You have a new complaint");
         notification.setContentText("Read the complaint");
-        Intent intent2 =new Intent(this,MainActivity.class);
+        Intent intent2 =new Intent(this,AuthorityMenu.class);
         PendingIntent pendingIntent= PendingIntent.getActivity(this,0,intent2,PendingIntent.FLAG_UPDATE_CURRENT);
         notification.setContentIntent(pendingIntent);
         NotificationManager NotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);

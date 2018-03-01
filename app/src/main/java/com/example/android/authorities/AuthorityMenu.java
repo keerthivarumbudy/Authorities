@@ -82,7 +82,7 @@ public class AuthorityMenu extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //notification stuff
-                setNotification();
+                //setNotification();
 
             }
 
@@ -130,7 +130,7 @@ public class AuthorityMenu extends AppCompatActivity {
         notification.setWhen(System.currentTimeMillis());
         notification.setContentTitle("You have a new complaint");
         notification.setContentText("Read the complaint");
-        Intent intent2 =new Intent(this,MainActivity.class);
+        Intent intent2 =new Intent(this,ComplaintList.class);
         PendingIntent pendingIntent= PendingIntent.getActivity(AuthorityMenu.this,0,intent2,PendingIntent.FLAG_UPDATE_CURRENT);
         notification.setContentIntent(pendingIntent);
         NotificationManager NotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
