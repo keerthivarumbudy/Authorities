@@ -64,6 +64,7 @@ public class DisplayComplaint extends AppCompatActivity {
             public void onClick(View v) {
 
                     mdatabaseRef.child(CId).child("Accepted").setValue("Yes");
+                    AcceptComplaint.setText("Accepted");
 
             }
         });
@@ -71,6 +72,7 @@ public class DisplayComplaint extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mdatabaseRef.child(CId).child("ProblemSolved").setValue("Yes");
+                ProblemSolved.setText("great");
             }
         });
     }
