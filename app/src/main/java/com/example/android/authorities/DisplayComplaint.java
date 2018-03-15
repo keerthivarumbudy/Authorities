@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +25,9 @@ public class DisplayComplaint extends AppCompatActivity {
     private String User;
     private String CId;
     private String databaseNode;
-
+    private String checkAccepted;
+    private Button AcceptComplaint;
+    private Button ProblemSolved;
 
 
     @Override
@@ -36,7 +39,8 @@ public class DisplayComplaint extends AppCompatActivity {
         ArrayList<String> array1 = intent.getStringArrayListExtra("hashMap");
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, array1);
         DetailsList.setAdapter(adapter);
-        Button AcceptComplaint = findViewById(R.id.acceptComplaint);
+        AcceptComplaint = findViewById(R.id.acceptComplaint);
+        ProblemSolved= findViewById(R.id.problemSolved);
         Bundle bundle = getIntent().getExtras();
         User = bundle.getString("username");
         CId= array1.get(0);
@@ -58,11 +62,16 @@ public class DisplayComplaint extends AppCompatActivity {
 
         AcceptComplaint.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mdatabaseRef.child(CId).child("Accepted").setValue("Yes");
+
+                    mdatabaseRef.child(CId).child("Accepted").setValue("Yes");
 
             }
-
-
+        });
+        ProblemSolved.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mdatabaseRef.child(CId).child("ProblemSolved").setValue("Yes");
+            }
         });
     }
 }
