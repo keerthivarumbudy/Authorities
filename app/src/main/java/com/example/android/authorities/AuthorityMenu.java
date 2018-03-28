@@ -45,12 +45,14 @@ public class AuthorityMenu extends AppCompatActivity {
         notification= new NotificationCompat.Builder(this);
         buttonComplaints= findViewById(R.id.button1);
         buttonFeedback= findViewById(R.id.button2);
-        /*buttonFeedback.setOnClickListener(new View.OnClickListener() {
+        buttonFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setNotification();
+                Intent intent2 = new Intent(AuthorityMenu.this, Feedback.class);
+                intent2.putExtra("username", User);
+                AuthorityMenu.this.startActivity(intent2);
             }
-        });*/
+        });
         buttonComplaints.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,21 +78,7 @@ public class AuthorityMenu extends AppCompatActivity {
             Log.d("user", databaseNode);
         }
 
-        mRef=mRef.child(databaseNode);
 
-        mRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //notification stuff
-                //setNotification();
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         mToolbar=(Toolbar)findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);

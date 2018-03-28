@@ -18,7 +18,9 @@
         </activity>
         <activity android:name=".ComplaintList" />
         <activity android:name=".DisplayComplaint" />
-        <activity android:name=".AuthorityMenu"></activity>
+        <activity android:name=".AuthorityMenu" />
+        <activity android:name=".Feedback" />
+        <activity android:name=".RatingPage"></activity>
     </application>
 
 </manifest>

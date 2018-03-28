@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Authorities</string>
 
-<string name="problem_solved">Problem Solved</string>
+    <string name="problem_solved">Problem Solved</string>
 </resources>
